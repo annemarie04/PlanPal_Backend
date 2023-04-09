@@ -15,8 +15,12 @@ export class UsersService {
     return await bcrypt.hash(password, 10);
   }
 
+  async comparePassword(password: string, hashedPassword: string) {
+    return await bcrypt.compare(password, hashedPassword);
+  }
+
   async create(createUserDto: CreateUserDto) {
-    const hashedPassword = await this.hashPassword(createUserDto.password);
+    const hashedPassword =  await this.hashPassword(createUserDto.password);
     let newUser = new User();
     console.log(createUserDto);
 
@@ -26,13 +30,16 @@ export class UsersService {
     return userToAdd.save();
   }
 
-  findAll() {
-    return `This action returns all users`;
+  findByEmail(email: string) {
+    return this.userModel.findOne({email: email});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  /*
+  updatePassword(email: string) {
+    const 
   }
+  */
+  
 
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
