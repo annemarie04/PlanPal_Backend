@@ -9,7 +9,7 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class UsersService {
-  // constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async hashPassword(password: string): Promise<string> {
     return await bcrypt.hash(password, 10);
@@ -22,7 +22,8 @@ export class UsersService {
 
     newUser = {...createUserDto, password: hashedPassword};
     console.log(newUser);
-    return newUser;
+    const userToAdd = new this.userModel(newUser);
+    return userToAdd.save();
   }
 
   findAll() {

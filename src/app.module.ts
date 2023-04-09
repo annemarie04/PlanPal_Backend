@@ -12,7 +12,7 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    // MongooseModule.forRoot("mongodb+srv://moise_alexandru:1234@clusterplanpal.xqijxvb.mongodb.net/?retryWrites=true&w=majority"),
+    MongooseModule.forRoot(process.env.DATABASE_URL),
     TasksModule, 
     UsersModule 
   ],
