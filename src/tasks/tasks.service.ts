@@ -9,9 +9,13 @@ import { TaskDocument } from './schema/tasks.schema';
 @Injectable()
 export class TasksService {
   constructor(@InjectModel(Task.name) private taskModel: Model<TaskDocument>) {}
-  create(createTaskDto: CreateTaskDto) {
-    const task = new this.taskModel(createTaskDto);
-    return task.save();
+
+  // Aici: primesc un parametru de forma CreateTaskDto, un userId si vreau sa introduc un obiect de tipul tasks.schema in baza de date
+  create(createTaskDto: CreateTaskDto, userId: String) {
+
+    // creez un obiect nou din care copiez atributele obiectului createTaskDto si setez field-ul de owner sa fie egal cu userId + updatez field-urile de createdAt si updatedAt
+    const createdTask = new this.taskModel({...createTaskDto, owner: userId, createdAt: Date.now(), updatedAt: Date.now()}); 
+    return createdTask.save();
   }
 
   findAll() {
@@ -20,6 +24,10 @@ export class TasksService {
 
   findOne(id: string) {
     return this.taskModel.findById(id);
+  }
+
+  getAllByOwnerId(id: string) {
+    return this.taskModel.find({ownerId: id});
   }
 
   update(id: string, updateTaskDto: UpdateTaskDto) {

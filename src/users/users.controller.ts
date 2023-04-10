@@ -13,6 +13,11 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @Get('all') // for testing purpose only, needs to be deleted
+  getAllUsers() {
+    return this.usersService.getAll();
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get(':email')
   findByEmail(@Req() req, @Param('email') email: string) {
@@ -25,6 +30,7 @@ export class UsersController {
     return this.usersService.updatePassword(username);
   }
 */
+  
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);

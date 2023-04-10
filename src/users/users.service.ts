@@ -34,6 +34,9 @@ export class UsersService {
     return await this.userModel.findOne({email: email});
   }
 
+  async getAll() { // for testing only, needs to be deleted
+    return await this.userModel.find();
+  }
   /*
   updatePassword(email: string) {
     const 

@@ -7,14 +7,22 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.create(createTaskDto);
+  // Mai jos: un POST request de forma localhost:4000/tasks/:userId
+  // tasks vine de la linia 6, iar :userId de mai jos
+  // iau userId-ul si body-ul (care e de forma CreateTaskDto) si apelez serviciul respectiv  
+  @Post(':userId')
+  create(@Param('userId') userId:string, @Body() createTaskDto: CreateTaskDto) {
+    return this.tasksService.create(createTaskDto, userId);
   }
 
   @Get()
   findAll() {
     return this.tasksService.findAll();
+  }
+
+  @Get('userid')
+  getAllByUsername(@Param('userid') id: string) {
+    return this.tasksService.getAllByOwnerId(id);
   }
 
   @Get(':id')
