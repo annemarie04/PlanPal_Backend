@@ -14,8 +14,9 @@ import { AuthModule } from './auth/auth.module';
       envFilePath: '.env',
     }),
     MongooseModule.forRoot(process.env.DATABASE_URL),
-    TasksModule, 
-    UsersModule, AuthModule 
+    TasksModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

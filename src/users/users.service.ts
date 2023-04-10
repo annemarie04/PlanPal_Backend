@@ -30,8 +30,8 @@ export class UsersService {
     return userToAdd.save();
   }
 
-  findByEmail(email: string) {
-    return this.userModel.findOne({email: email});
+  async findByEmail(email: string) {
+    return await this.userModel.findOne({email: email});
   }
 
   /*

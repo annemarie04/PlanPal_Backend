@@ -15,10 +15,10 @@ export class Task {
   date: Date;
 
   @Prop()
-  dateCreated: Date;
+  createdAt: Date;
 
   @Prop()
-  lastEdited: Date;
+  updatedAt: Date;
 }
 
-export const UserSchema = SchemaFactory.createForClass(Task);
+export const TaskSchema = SchemaFactory.createForClass(Task);

@@ -4,23 +4,26 @@ import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private userService: UsersService, private jwtService: JwtService) {}
+    constructor(private userService: UsersService, private jwtService: JwtService) { }
 
     async validateUser(email: string, password: string) {
         const user = await this.userService.findByEmail(email);
-        if(user && this.userService.comparePassword(password, user.password)) {
-            const {password, ...result } = user;
-            return result;  
+        if (user && await this.userService.comparePassword(password, user.password)) {
+            return {
+                userId: user._id,
+                username: user.username,
+            };
         }
-        else
-            return null;
+        return null;
     }
+
     async login(user: any) {
         const payload = { userId: user.userId, iat: new Date().getTime() };
         return this.jwtService.sign(payload);
     }
+
     async decodeToken(token: string) {
-        if(!token)
+        if (!token)
             return null;
         return this.jwtService.decode(token);
     }
