@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -11,32 +11,33 @@ export class TasksController {
   // tasks vine de la linia 6, iar :userId de mai jos
   // iau userId-ul si body-ul (care e de forma CreateTaskDto) si apelez serviciul respectiv  
   @Post(':userId')
-  create(@Param('userId') userId:string, @Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.create(createTaskDto, userId);
+  async create(@Param('userId') userId:string, @Body() createTaskDto: CreateTaskDto) {
+    return await this.tasksService.createTask(createTaskDto, userId);
   }
 
-  @Get()
-  findAll() {
-    return this.tasksService.findAll();
+  @Get('all/:userId')
+  async getAllByUserId(@Param('userId') userId: string) {
+    return await this.tasksService.getTasksByUserId(userId);
   }
 
-  @Get('userid')
-  getAllByUsername(@Param('userid') id: string) {
-    return this.tasksService.getAllByOwnerId(id);
+  @Get('task/:taskId')
+  async getTaskById(@Param('taskId') taskId: string) {
+    return await this.tasksService.getTaskById(taskId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tasksService.findOne(id);
+  @Delete('task/:taskId')
+  async deleteTaskById(@Param('taskId') taskId: string) {
+    return await this.tasksService.deleteTaskById(taskId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.tasksService.update(id, updateTaskDto);
+  @Patch('task/:taskId')
+  async patchTaskById(@Param('taskId') taskId: string, @Body() updateTaskDto: UpdateTaskDto) {
+    return await this.tasksService.patchTaskById(taskId, updateTaskDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tasksService.remove(id);
+  @Put('task/:taskId')
+  async putTaskById(@Param('taskId') taskId: string, @Body() updateTaskDto: UpdateTaskDto) {
+    return await this.tasksService.putTaskById(taskId, updateTaskDto);
   }
+  
 }

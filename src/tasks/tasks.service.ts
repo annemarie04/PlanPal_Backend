@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -11,30 +11,44 @@ export class TasksService {
   constructor(@InjectModel(Task.name) private taskModel: Model<TaskDocument>) {}
 
   // Aici: primesc un parametru de forma CreateTaskDto, un userId si vreau sa introduc un obiect de tipul tasks.schema in baza de date
-  create(createTaskDto: CreateTaskDto, userId: String) {
-
+  async createTask(createTaskDto: CreateTaskDto, userId: string) {
     // creez un obiect nou din care copiez atributele obiectului createTaskDto si setez field-ul de owner sa fie egal cu userId + updatez field-urile de createdAt si updatedAt
     const createdTask = new this.taskModel({...createTaskDto, owner: userId, createdAt: Date.now(), updatedAt: Date.now()}); 
-    return createdTask.save();
+    return await createdTask.save();
   }
 
-  findAll() {
-    return this.taskModel.find();
+  async getTasksByUserId(userId: string) : Promise <Task[]> {
+    return await this.taskModel.find({owner: userId}); // returneaza lista cu taskurile care au atributul owner = userId
   }
 
-  findOne(id: string) {
-    return this.taskModel.findById(id);
+  async getTaskById(taskId: string) : Promise <Task> {
+    return await this.taskModel.findById(taskId);
   }
 
-  getAllByOwnerId(id: string) {
-    return this.taskModel.find({ownerId: id});
+  async deleteTaskById(taskId: string) : Promise <Task | null> {
+    return await this.taskModel.findByIdAndDelete(taskId);
   }
 
-  update(id: string, updateTaskDto: UpdateTaskDto) {
-    return this.taskModel.findByIdAndUpdate(id, updateTaskDto, {new: true});
+  async patchTaskById(taskId: string, updateTaskDto: UpdateTaskDto) : Promise <Task | null> {
+    const task = await this.taskModel.findById(taskId);
+    if(!task)
+      throw new NotFoundException("Task with id ${taskId} not found");
+    if(updateTaskDto.title)
+      task.title = updateTaskDto.title;
+    if(updateTaskDto.description)
+      task.description = updateTaskDto.description;
+    if(updateTaskDto.date)
+      task.date = updateTaskDto.date;
+    return await task.save();
   }
 
-  remove(id: string) {
-    return this.taskModel.findByIdAndDelete(id);
+  async putTaskById(taskId: string, updateTaskDto: UpdateTaskDto) : Promise <Task | null> {
+    const task = await this.taskModel.findById(taskId);
+    if(!task)
+      throw new NotFoundException("Task with id ${taskId} not found");
+    task.title = updateTaskDto.title;
+    task.description = updateTaskDto.description;
+    task.date = updateTaskDto.date;
+    return await task.save();
   }
 }

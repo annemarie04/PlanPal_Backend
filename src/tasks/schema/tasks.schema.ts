@@ -4,7 +4,12 @@ import { User } from '../../users/schema/users.schema';
 
 export type TaskDocument = HydratedDocument<Task>;
 
-@Schema()
+@Schema({
+  timestamps: {
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  }
+})
 export class Task {
   @Prop({required: true})
   title: string;
@@ -18,10 +23,10 @@ export class Task {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   owner: User;
 
-  @Prop()
+  @Prop({default: Date.now()})
   readonly createdAt: Date;
 
-  @Prop()
+  @Prop({default: Date.now()})
   readonly updatedAt: Date;
 }
 
