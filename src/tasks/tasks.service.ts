@@ -3,8 +3,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Task } from './entities/task.entity';
-import { TaskDocument } from './schema/tasks.schema';
+import { Task, TaskDocument } from './schema/tasks.schema';
 
 @Injectable()
 export class TasksService {
@@ -21,9 +20,12 @@ export class TasksService {
     return await this.taskModel.find({owner: userId}); // returneaza lista cu taskurile care au atributul owner = userId
   }
 
-  async getTaskById(taskId: string) : Promise <Task> {
-    return await this.taskModel.findById(taskId);
+  async getTaskById(taskId: string): Promise<Task | null> {
+    const task = await this.taskModel.findById(taskId);
+    //console.log(task);
+    return task;
   }
+  
 
   async deleteTaskById(taskId: string) : Promise <Task | null> {
     return await this.taskModel.findByIdAndDelete(taskId);

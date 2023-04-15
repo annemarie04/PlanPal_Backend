@@ -19,6 +19,9 @@ export class Task {
 
   @Prop()
   date: Date;
+  
+  @Prop({enum: ['to do', 'in progress', 'done'], default: 'to do'})
+  status: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   owner: User;
