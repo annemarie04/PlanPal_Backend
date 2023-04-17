@@ -3,5 +3,5 @@ export class CreateTaskDto {
     description: string;
     date: Date;
     status: string;
-    ownerId: string;
+    tags: string[];
 }

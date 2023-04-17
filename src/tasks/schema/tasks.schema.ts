@@ -19,6 +19,9 @@ export class Task {
 
   @Prop()
   date: Date;
+
+  @Prop({type: [String]})
+  tags: string[];
   
   @Prop({enum: ['to do', 'in progress', 'done'], default: 'to do'})
   status: string;

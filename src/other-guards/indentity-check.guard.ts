@@ -8,7 +8,7 @@ export class IdentityCheckGuard implements CanActivate {
     const authenticatedUserId = request.user.userId;
 
     if (userId !== authenticatedUserId) {
-      throw new ForbiddenException('You are not authorized to view tasks for this user.');
+      throw new ForbiddenException('You are not authorized to view activities this user.');
     }
 
     return true;

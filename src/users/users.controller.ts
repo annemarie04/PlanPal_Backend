@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { IdentityCheckGuard } from 'src/other-guards/indentity-check.guard';
 
 @Controller('users')
 export class UsersController {
@@ -24,20 +25,14 @@ export class UsersController {
     const userID = req.user.userId;
     return this.usersService.findByEmail(email);
   }
-  /*
-  @Post("changepassword/:username")
-  updatePassword(@Param('username') username: string) {
-    return this.usersService.updatePassword(username);
-  }
-*/
   
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, IdentityCheckGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, IdentityCheckGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

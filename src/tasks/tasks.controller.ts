@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards, Query } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { TaskOwnerGuard } from './guard/tasks.guard';
 import { IdentityCheckGuard } from 'src/other-guards/indentity-check.guard';
 
@@ -20,11 +20,21 @@ export class TasksController {
     return await this.tasksService.createTask(createTaskDto, userId);
   }
 
+
+  // get-ul de mai jos se va apela astfel: localhost:4000/tasks/all/643c8ef35d8de24f27d4ec0d?tags=ceva,altceva
+  //                                                                     userId              taguri(optional)
   @UseGuards(JwtAuthGuard, IdentityCheckGuard)
   @Get('all/:userId')
-  async getAllByUserId(@Param('userId') userId: string) {
-    return await this.tasksService.getTasksByUserId(userId);
-  }
+  async getAllByUserId(@Param('userId') userId: string, @Query('tags') tags: string | null) {
+    let tagArray: string[] = [];
+    if(tags && typeof tags === 'string') {
+        tagArray = tags.split(',');
+    }
+    else if(Array.isArray(tags)) {
+        tagArray = tags;
+    }
+    return await this.tasksService.getTasksByUserId(userId, tagArray);
+}
 
   @UseGuards(JwtAuthGuard, TaskOwnerGuard)
   @Get('task/:taskId')

@@ -16,8 +16,12 @@ export class TasksService {
     return await createdTask.save();
   }
 
-  async getTasksByUserId(userId: string) : Promise <Task[]> {
-    return await this.taskModel.find({owner: userId}); // returneaza lista cu taskurile care au atributul owner = userId
+  async getTasksByUserId(userId: string, tags: string[] | null) : Promise <Task[]> {
+    const tasks = await this.taskModel.find({owner: userId}); // returneaza lista cu taskurile care au atributul owner = userId
+    if(tags && tags.length > 0) {
+      return tasks.filter(task => tags.every(tag => task.tags.includes(tag))); // returneaza doar taskurile ce includ toate tagurile pe care le-am trimis ca parametru
+    }
+    return tasks;
   }
 
   async getTaskById(taskId: string): Promise<Task | null> {
@@ -33,6 +37,7 @@ export class TasksService {
 
   async patchTaskById(taskId: string, updateTaskDto: UpdateTaskDto) : Promise <Task | null> {
     const task = await this.taskModel.findById(taskId);
+    console.log(updateTaskDto);
     if(!task)
       throw new NotFoundException("Task with id ${taskId} not found");
     if(updateTaskDto.title)
@@ -41,6 +46,10 @@ export class TasksService {
       task.description = updateTaskDto.description;
     if(updateTaskDto.date)
       task.date = updateTaskDto.date;
+    if(updateTaskDto.status)
+      task.status = updateTaskDto.status;
+    if(updateTaskDto.tags)
+      task.tags = updateTaskDto.tags;
     return await task.save();
   }
 
@@ -51,6 +60,8 @@ export class TasksService {
     task.title = updateTaskDto.title;
     task.description = updateTaskDto.description;
     task.date = updateTaskDto.date;
+    task.status = updateTaskDto.status;
+    task.tags = updateTaskDto.tags;
     return await task.save();
   }
 }
