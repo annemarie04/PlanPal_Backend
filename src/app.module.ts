@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { EventModule } from './event/events.module';
+import { DeadlinesModule } from './deadlines/deadlines.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { EventModule } from './event/events.module';
     AuthModule,
     UsersModule,
     EventModule,
+    DeadlinesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
