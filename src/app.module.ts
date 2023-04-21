@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { EventModule } from './event/events.module';
 import { DeadlinesModule } from './deadlines/deadlines.module';
+import { ActivitiesModule } from './activities/activities.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { DeadlinesModule } from './deadlines/deadlines.module';
     UsersModule,
     EventModule,
     DeadlinesModule,
+    ActivitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
