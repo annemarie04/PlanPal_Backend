@@ -18,19 +18,16 @@ export class Activity {
     description: string;
 
     @Prop()
-    repeat: string;
-
-    @Prop()
     start_date: Date;
 
     @Prop()
     end_date: Date;
 
     @Prop()
-    start_time: Date;
+    repeat?: Number;
 
     @Prop()
-    end_time: Date;
+    repeat_end_date?: string;
 
     @Prop({type: [String]})
     tags: string[];
