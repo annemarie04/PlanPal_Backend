@@ -11,6 +11,6 @@ async function bootstrap() {
   });
   app.useLogger(new Logger('debug')); // to be deleted later
   app.use(cookieParser());
-  await app.listen(4000);
+  await app.listen(process.env.PORT || 4000);
 }
 bootstrap();
