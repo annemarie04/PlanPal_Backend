@@ -14,11 +14,8 @@ export class ActivitiesService {
     return await createdActivity.save();
   }
 
-  async getActivitiesByUserId(userId: string, tags: string[] | null) : Promise <Activity[]> {
+  async getActivitiesByUserId(userId: string) : Promise <Activity[]> {
     const activities = await this.activityModel.find({owner: userId});
-    if(tags && tags.length > 0) {
-      return activities.filter(activity => tags.every(tag => activity.tags.includes(tag)));
-    }
     return activities;
   }
 
@@ -43,8 +40,8 @@ export class ActivitiesService {
       activity.start_date = updateActivityDto.start_date;
     if(updateActivityDto.end_date)
       activity.end_date = updateActivityDto.end_date;
-    if(updateActivityDto.tags)
-      activity.tags = updateActivityDto.tags;
+    activity.repeat = updateActivityDto.repeat;
+    activity.repeat_end_date = updateActivityDto.repeat_end_date;
     return await activity.save();
   }
 
@@ -56,7 +53,8 @@ export class ActivitiesService {
     activity.description = updateActivityDto.description;
     activity.start_date = updateActivityDto.start_date;
     activity.end_date = updateActivityDto.end_date;
-    activity.tags = updateActivityDto.tags;
+    activity.repeat = updateActivityDto.repeat;
+    activity.repeat_end_date = updateActivityDto.repeat_end_date;
     return await activity.save();
   }
   

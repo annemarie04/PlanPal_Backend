@@ -26,7 +26,7 @@ export class ActivitiesController {
     else if(Array.isArray(tags)) {
         tagArray = tags;
     }
-    return await this.activitiesService.getActivitiesByUserId(userId, tagArray);
+    return await this.activitiesService.getActivitiesByUserId(userId);
   }
 
   @UseGuards(JwtAuthGuard, ActivityOwnerGuard)

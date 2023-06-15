@@ -27,10 +27,7 @@ export class Activity {
     repeat?: Number;
 
     @Prop()
-    repeat_end_date?: string;
-
-    @Prop({type: [String]})
-    tags: string[];
+    repeat_end_date?: Date;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     owner: User;
