@@ -20,9 +20,9 @@ export class AuthController {
         const expires = new Date(Date.now() + sevenDaysInSeconds * 1000);
 
         res.cookie('auth-token', token, {
-            expires,
+            maxAge: sevenDaysInSeconds,
             httpOnly: true,
-            sameSite: 'strict'
+            // sameSite: 'strict'
         });
         //console.log("returned username and userId on login:", user.username, user.userId);
         return {
