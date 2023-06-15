@@ -16,13 +16,14 @@ export class AuthController {
         const user = req.user;
         const token = await this.authService.login(user);
         
-        const sevenDaysInSeconds = 7 * 24 * 60 * 60;
+        const sevenDaysInSeconds = 7 * 24 * 60 * 60 * 1000;
         const expires = new Date(Date.now() + sevenDaysInSeconds * 1000);
 
         res.cookie('auth-token', token, {
             maxAge: sevenDaysInSeconds,
             httpOnly: true,
-            // sameSite: 'strict'
+            sameSite: 'none',
+            secure: true,
         });
         //console.log("returned username and userId on login:", user.username, user.userId);
         return {
