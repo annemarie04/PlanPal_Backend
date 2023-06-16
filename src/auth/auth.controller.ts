@@ -35,7 +35,12 @@ export class AuthController {
     @Post('logout')
     async logout(@Res({passthrough: true}) res: Response) {
         console.log("logout request.")
-        res.clearCookie('auth-token');
+        res.cookie('auth-token', '', {
+            maxAge: Date.now(),
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+        });
         return {
           message: 'Logged out successfully',
         };
